@@ -1,0 +1,73 @@
+[local]
+sqlalchemy.url = postgresql://postgres:0000000@localhost/postgres
+version_locations = ./migrations/local
+
+[dev]
+sqlalchemy.url = postgresql://postgres:0000000@test-db.cptc08gbi2ai.us-east-1.rds.amazonaws.com/dev-tigc
+version_locations = ./migrations/dev
+
+[prod]
+sqlalchemy.url = postgresql://postgres:0000000@test-db.cptc08gbi2ai.us-east-1.rds.amazonaws.com/prod-tigc
+version_locations = ./migrations/prod
+
+[alembic]
+databases = local, dev, prod
+
+[DEFAULT]
+# template used to generate migration files
+file_template = %%(year)d-%%(month).2d-%%(day).2d-%%(hour).2d-%%(minute).2d-%%(second).2d_%%(rev)s_%%(slug)s
+truncate_slug_length = 60
+
+prepend_sys_path = .
+script_location = ./migrations/
+
+version_path_separator = os
+
+; sqlalchemy.url = driver://user:pass@localhost/dbname
+
+
+[post_write_hooks]
+# post_write_hooks defines scripts or Python functions that are run
+# on newly generated revision scripts.  See the documentation for further
+# detail and examples
+
+# format using "black" - use the console_scripts runner, against the "black" entrypoint
+# hooks = black
+# black.type = console_scripts
+# black.entrypoint = black
+# black.options = -l 79 REVISION_SCRIPT_FILENAME
+
+# Logging configuration
+[loggers]
+keys = root,sqlalchemy,alembic
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = WARN
+handlers = console
+qualname =
+
+[logger_sqlalchemy]
+level = WARN
+handlers =
+qualname = sqlalchemy.engine
+
+[logger_alembic]
+level = INFO
+handlers =
+qualname = alembic
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %(levelname)-5.5s [%(name)s] %(message)s
+datefmt = %H:%M:%S
